@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Venditore</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="ecommerce dvd, film, serie TV, dvd">
+        <meta name="author" content="Francesca Bacci">
+        <meta name="description" content="Vendita online di DVD">
+        
+        <!-- CSS -->
+        <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
+    </head>
+    
+    <body>
+        
+        <!-- Header -->
+        <div class="header">
+                    <div class="logo">
+                        <div class="menu">
+                            <ul>
+                                <li><a href="login.html">Login</a></li>
+                                <li><a href="descrizione.html">Descrizione</a></li>
+                                <li class="currentp"><a href="venditore.html">Venditore</a></li>
+                                <li><a href="cliente.html">Cliente</a></li>
+                            </ul>
+                        </div>
+                    </div>
+        </div>      
+        
+        <div class="page">
+                    
+        <!-- Sidebar a sinistra -->
+        <div class="sidebar">
+            <h3 class="sideb">Generi</h3>
+            <ul class="generi">
+                <li><a href="">Animazione</a></li>
+                <li><a href="">Azione</a></li>
+                <li><a href="">Commedia</a></li>
+                <li><a href="">Drammatico</a></li>
+                <li><a href="">Fantascienza</a></li>
+                <li><a href="">Horror</a></li>
+                <li><a href="">Romantico</a></li>
+                <li><a href="">Serie TV</a></li>
+                <li><a href="">Storico</a></li>
+                <li><a href="">Thriller</a></li>
+            </ul>
+                        
+            <hr>
+            <h3 class="sideb">Naviga</h3>
+            <nav>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="descrizione.html">Descrizione</a></li>
+                </ul>
+            </nav>
+            
+        </div>
+        
+        <!-- contenuto pagina -->
+        <div class="content">
+        
+        <h2>Inserimento di un nuovo prodotto</h2>
+        
+        <!-- Form nuovo prodotto -->
+        
+        <form>
+            <div>
+                <label for="nomep" id="prname">Nome del prodotto</label>
+                <input type="text" name="nomep" id="nomep">
+                <label for="imm" id="primm">URL immagine</label>
+                <input type="url" id="imm" name="imm">
+                <label for="desc" id="prdesc">Descrizione</label>
+                <textarea name="desc" id="desc" cols="40" rows="5">Descrizione dell'oggetto</textarea>
+                <label for="prezzo" id="pr_prezzo">Prezzo (in €)</label>
+                <input type="number" name="prezzo" id="prezzo">
+                <label for="quant" id="prquant">Pezzi disponibili</label>
+                <input type="number" name="quant" id="quant">
+            </div>
+            <br />
+            <button type="submit">Inserisci</button> <button type="reset">Cancella</button>
+        </form>
+        </div>
+        
+        </div>
+    </body>
+</html>
