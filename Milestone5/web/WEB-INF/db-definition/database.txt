@@ -1,0 +1,15 @@
+Entita':
+Cliente (Attributi: codice, nome, cognome, username, password)
+Venditore (Attributi: codice, nome, cognome, username, password)
+Oggetto (Attributi: id, titolo, categoria, quantita, prezzo)
+Saldo (Attributi: id, saldo)
+Acquisto (Attributi: idcl, idobj)
+
+Cliente (N) -----------> (N) Oggetto
+             acquisto
+
+Venditore (1) ---------> (N) Oggetto
+
+Cliente (1) -----------> (1) Saldo
+
+Venditore (1) ---------> (1) Saldo
