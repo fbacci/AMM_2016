@@ -22,9 +22,6 @@ and open the template in the editor.
         
         <!-- CSS -->
         <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
-        
-        <script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
-        <script type="text/javascript" src="js/filtro.js"></script>
     </head>
     
     <body>
@@ -47,31 +44,69 @@ and open the template in the editor.
         <!-- contenuto pagina -->
         <div class="content">
         
-        <h2 id="product">Prodotti in vendita</h2>
+        <!-- CONTROLLI -->
+        <c:choose>
+            <c:when test="${accesso.equals('No')}">
+                <h2 id="product">Accesso negato!</h2>
+                <div>Non hai i diritti per visualizzare questa pagina.</div>
+            </c:when>    
+                
+            <c:when test="${accesso.equals('Ok')}">
+                <h2 id="product">Prodotti in vendita</h2>
+                
+                <label for="q">Filtra:</label> <input type="text" id="q" />
+                <p id="messaggio"></p>
+
+                <table>
+                    <tr>
+                        <th>Codice</th>
+                        <th>Nome</th>
+                        <th>Quantità</th>
+                        <th>Prezzo</th>
+                        <th>Acquista</th>
+                    </tr>
+                    <c:forEach var="obj" items="${oggetti}">
+                    <tr id="obj_row">
+                        <td>${obj.id}</td>
+                        <td class="titolo">${obj.titolo}</td>
+                        <td class="pq">${obj.quantita}</td>
+                        <td class="pq">${obj.prezzo}</td>
+                        <td class="add"><form action="cliente.html">
+                                        <input type="hidden" name="obj" value="${obj.titolo}" />
+                                        <button type="submit" name="compra"><span class="add2cart"></span></button>
+                                        </form></td>
+                    </tr>
+                    </c:forEach>
+                </table>
+            </c:when>
+                
+            <c:when test="${accesso.equals('buying')}">
+                <h2>Riepilogo oggetto</h2>
         
-        <label for="q">Filtra:</label> <input type="text" id="q">
-        
-        <p id="messaggio"></p>
-        
-        <!-- Tabella prodotti -->
-             
-        <table>
-            <tr>
-                <th>Nome</th>
-                <th>Quantità</th>
-                <th>Prezzo</th>
-                <th>Acquista</th>
-            </tr>
-            <c:forEach var="obj" items="${oggetti}">
-            <tr id="obj_row">
-                <td class="titolo">${obj.titolo}</td>
-                <td class="pq">${obj.quantita}</td>
-                <td class="pq">${obj.prezzo}</td>
-                <td class="add"><a href="cliente.html?titolo=${obj.titolo}">Aggiungi al carrello</a></td>
-            </tr>
-            </c:forEach>
-        </table>
-        
+                <ul>
+                    <li>Nome prodotto: ${titolo}</li>
+                    <li>Prezzo: ${prezzo}</li>
+                    <li>Quantita: ${quantita}</li>
+                </ul>
+
+                <form action="cliente.html">
+                    <input type="hidden" name="objprice" value="${prezzo}" />  
+                    <input type="hidden" name="objtitle" value="${titolo}" />
+                    <button type="submit" name="conferma">Conferma</button>
+                </form>
+            </c:when>
+                
+            <c:when test="${esito.equals('good')}">
+                <h2>Esito acquisto</h2>
+                <div>Acquisto effettuato con successo!</div>               
+            </c:when>
+
+            <c:when test="${esito.equals('notgood')}">
+                <h2>Esito acquisto</h2>
+                <div>Acquisto non effettuato, saldo insufficiente!</div>               
+            </c:when>                
+        </c:choose>
+                     
         </div>
         
         </div>

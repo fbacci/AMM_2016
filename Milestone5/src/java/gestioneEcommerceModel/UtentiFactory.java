@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -104,7 +104,7 @@ public class UtentiFactory {
         try{
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
                         
-            String query = "select * from venditore where username = ? and password = ?";
+            String query = "select * from venditore where " + "username = ? and password = ?";
             
             PreparedStatement stmt = conn.prepareStatement(query);
             
@@ -128,7 +128,7 @@ public class UtentiFactory {
                 return venditore;       
             }
             
-            query = "select * from cliente where username = ? and password = ?";
+            query = "select * from cliente where " + "username = ? and password = ?";
             
             stmt = conn.prepareStatement(query);
             
@@ -152,12 +152,10 @@ public class UtentiFactory {
                 return cliente;
             }
             
-            
             stmt.close();
-        }
-        catch(SQLException e)
-        {
-            
+            conn.close();
+        } catch(SQLException e){
+            e.printStackTrace();
         }
         
         return null;
@@ -271,52 +269,111 @@ public class UtentiFactory {
         return listaUtenti;
     }
     
-    public int getIdClbyAcquisto(int idobj){
-        int idcl = 0;
+    public int getSaldoCliente(int idcl){
+        int saldo = 0;
         
         try{    
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
-                        
-            String query = "select idcliente from acquisto where idoggetto = ?";
+            
+            String query = "SELECT saldo FROM saldo JOIN cliente ON cliente.idsaldo = saldo.id " + "WHERE cliente.codice = ?";
             
             PreparedStatement stmt = conn.prepareStatement(query);
             
-            stmt.setInt(1, idobj);
+            stmt.setInt(1,idcl);
             
             ResultSet set = stmt.executeQuery();
             
             if(set.next()){
-                idcl = set.getInt("idcliente");
+                saldo = set.getInt("saldo");
             }
-        } catch(SQLException e){
             
+            stmt.close();
+            conn.close();            
+        } catch (SQLException e){
+            e.printStackTrace();
         }
         
-        return idcl;
+        return saldo;
     }
     
-    public int getIdVbyAcquisto(int idobj){
+    public int getIdVbyObj (int idobj){
         int idv = 0;
         
-        try{    
+        try{
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
-                        
-            String query = "select idvenditore from acquisto where idoggetto = ?";
-            
+
+            String query = "SELECT idvenditore FROM oggetto WHERE " + "id = ?";
+
             PreparedStatement stmt = conn.prepareStatement(query);
-            
+
             stmt.setInt(1, idobj);
-            
+
             ResultSet set = stmt.executeQuery();
-            
+
             if(set.next()){
-                idv = set.getInt("idcliente");
+                idv = set.getInt("idvenditore");
             }
-        } catch(SQLException e){
             
-        }
+            stmt.close();
+            conn.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } 
         
         return idv;
+    }
+
+    public int getIdSaldoCl (int idcl) throws SQLException{
+        int idsc = 0;
+        
+        try{
+            Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
+
+            String query = "select idsaldo from cliente where " + "codice = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1,idcl);
+
+            ResultSet set = stmt.executeQuery();
+
+            if(set.next()){
+                idsc = set.getInt("idsaldo");
+            }
+            
+            stmt.close();
+            conn.close();
+        
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return idsc;
+    }
+    
+    public int getIdSaldoV (int idv) throws SQLException{
+        int idsv = 0;
+        
+        try{
+            Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
+
+            String query = "select idsaldo from venditore where " + "codice = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1,idv);
+
+            ResultSet set = stmt.executeQuery();
+
+            if(set.next()){
+                idsv = set.getInt("idsaldo");
+            }
+            
+            stmt.close();
+            conn.close();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return idsv;
     }    
     
     public void setConnectionString(String s) {

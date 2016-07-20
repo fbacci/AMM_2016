@@ -328,14 +328,12 @@ li.currentp a:hover
 
 #login
 {
-    margin-left: 225px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin-left: 10px;
 }
 
 #pw
 {
-    margin-right: 13px;
+    margin-right: 14px;
 }
 
 #prdesc

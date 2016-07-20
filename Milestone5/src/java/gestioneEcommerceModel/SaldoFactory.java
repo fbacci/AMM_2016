@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,68 +28,12 @@ public class SaldoFactory {
         return saldo;
     }
     
-    private ArrayList<Saldo> listaSaldiV = new ArrayList<Saldo>();
-    private ArrayList<Saldo> listaSaldiC = new ArrayList<Saldo>();
     private ArrayList<Saldo> listaS = new ArrayList<Saldo>();
     
     private SaldoFactory(){
 
     }
     
-    public ArrayList<Saldo> getSaldoCList()
-    {
-        try {
-            Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
-            
-            String query = "SELECT * FROM cliente JOIN saldo ON cliente.idsaldo = saldo.id";
-            
-            Statement stmt = conn.createStatement();
-            
-            ResultSet set = stmt.executeQuery(query);
-            
-            while(set.next()){
-                Saldo s = new Saldo();
-                s.setId(set.getInt("id"));
-                s.setSaldo(set.getInt("saldo"));
-                listaSaldiC.add(s);
-            }
-            
-            stmt.close();
-            conn.close();
-        } catch(SQLException e){
-            
-        }
-        
-        return listaSaldiC;
-    }
-    
-    public ArrayList<Saldo> getSaldoVList()
-    {
-        try {
-            Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
-            
-            String query = "SELECT * FROM venditore JOIN saldo ON cliente.idsaldo = saldo.id";
-            
-            Statement stmt = conn.createStatement();
-            
-            ResultSet set = stmt.executeQuery(query);
-            
-            while(set.next()){
-                Saldo s = new Saldo();
-                s.setId(set.getInt("id"));
-                s.setSaldo(set.getInt("saldo"));
-                listaSaldiV.add(s);
-            }
-            
-            stmt.close();
-            conn.close();
-        } catch(SQLException e){
-            
-        }
-        
-        return listaSaldiV;
-    }
-
     public ArrayList<Saldo> getSaldiList()
     {
         try{

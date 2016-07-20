@@ -1,19 +1,4 @@
-<%-- 
-    Document   : sidebar
-    Created on : 14-apr-2016, 16.28.28
-    Author     : Francy
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <!-- Sidebar a sinistra -->
-        <div class="sidebar">
+<div class="sidebar">
             <h3 class="sideb">Generi</h3>
             <ul class="generi">
                 <li><a href="">Animazione</a></li>
@@ -37,6 +22,5 @@
                 </ul>
             </nav>
             
-        </div>
-    </body>
-</html>
+</div>
+

@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -43,7 +44,15 @@ and open the template in the editor.
         <div class="content">
         
         <!-- Form di login -->
-        <h2>Benvenuto, accedi al tuo profilo!</h2>
+        
+        <c:if test="${errore != null}">
+            <h2>Errore</h2>
+            <div>Il login non è andato a buon fine, riprova.</div>
+        </c:if>        
+        
+        <c:if test="${errore == null}">    
+            <h2>Benvenuto, accedi al tuo profilo!</h2>
+        </c:if>
         <form method="post" action="login.html" id="login">
             <div id="formlog">
                 <label for="user" id="us">Username</label>

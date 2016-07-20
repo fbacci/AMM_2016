@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceController;
 
+import gestioneEcommerceModel.OggettiFactory;
+import gestioneEcommerceModel.Oggetto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -38,17 +40,12 @@ public class Seller extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         
-        if(request.getParameter("Invia") == null && request.getParameter("Elimina") == null 
-           && request.getParameter("Edit") == null){
-             if(session.getAttribute("isLogged").equals(true)){
-                 if(session.getAttribute("tipo").equals("venditore")){
-                    request.getRequestDispatcher("venditore.jsp").forward(request, response);
-                 } else {
-                     request.getRequestDispatcher("accessonegato.jsp").forward(request, response);
-                     }   
-                 } else {
-                request.getRequestDispatcher("accessonegato.jsp").forward(request, response);
-                }
+        if(request.getParameter("Invia") == null && request.getParameter("Elimina") == null && request.getParameter("Edit") == null){
+            if(session.getAttribute("isLogged").equals(true) && session.getAttribute("tipo").equals("venditore")){
+                    session.setAttribute("accesso","Ok");
+            } else {
+                session.setAttribute("accesso","No");
+            }
         }
         
         if(request.getParameter("Invia") != null){
@@ -88,7 +85,8 @@ public class Seller extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             OggettiFactory.getInstance().cancellaOggetto(id); 
         }
-                    
+      
+        request.getRequestDispatcher("venditore.jsp").forward(request,response);        
     }
                
 

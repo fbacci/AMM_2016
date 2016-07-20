@@ -4,6 +4,7 @@
     Author     : Francy
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!--
@@ -43,53 +44,60 @@ and open the template in the editor.
         <!-- contenuto pagina -->
         <div class="content">
         
-        <h2>Operazioni venditore</h2>          
+        <c:choose>
+        <c:when test="${accesso.equals('No')}">
+            <h2 id="product">Accesso negato!</h2>
+            <div>Non hai i diritti per visualizzare questa pagina.</div>
+        </c:when>    
         
-        <!-- Form operazione su prodotto -->
-        <h3>Inserisci</h3>
-        <form method="post" action="venditore.html">
-            <div>
-                <label for="nomep" id="prname">Nome del prodotto</label>
-                <input type="text" name="titolo" id="nomep" />
-                <label for="categoria" id="cat">Categoria</label>
-                <input type="text" id="categoria" name="categoria" />
-                <label for="prezzo" id="prezzo">Prezzo (in €)</label>
-                <input type="number" name="prezzo" id="prezzo" />
-                <label for="quantita" id="quant">Pezzi disponibili</label>
-                <input type="number" name="quantita" id="quantita" />
-            </div>
-            <br />
-            <button type="submit" name="Invia">Inserisci</button> <button type="reset">Cancella</button>
-        </form><br />
+        <c:otherwise>    
+            <h2>Operazioni</h2>
+            
+            <h3>Inserisci</h3>
+            <form method="post" action="venditore.html">
+                <div>
+                    <label for="nomep" id="prname">Nome del prodotto</label>
+                    <input type="text" name="titolo" id="nomep" />
+                    <label for="categoria" id="cat">Categoria</label>
+                    <input type="text" id="categoria" name="categoria" />
+                    <label for="prezzo" id="prezzo">Prezzo (in €)</label>
+                    <input type="number" name="prezzo" id="prezzo" />
+                    <label for="quantita" id="quant">Pezzi disponibili</label>
+                    <input type="number" name="quantita" id="quantita" />
+                </div>
+                <br />
+                <button type="submit" name="Invia">Inserisci</button> <button type="reset">Cancella</button>
+            </form><br />
+            
+            <h3>Modifica</h3>
+            <form method="post" action="venditore.html">
+                <div>
+                    <label for="id" id="id">Codice del prodotto</label>
+                    <input type="number" name="id" id="id" />              
+                    <label for="nomep" id="prname2">Nome del prodotto</label>
+                    <input type="text" name="titolo" id="nomep" />
+                    <label for="categoria" id="cat">Categoria</label>
+                    <input type="text" id="categoria" name="categoria" />
+                    <label for="prezzo" id="prezzo">Prezzo (in €)</label>
+                    <input type="number" name="prezzo" id="prezzo" />
+                    <label for="quantita" id="quant">Pezzi disponibili</label>
+                    <input type="number" name="quantita" id="quantita" />
+                </div>
+                <br />
+                <button type="submit" name="Edit">Modifica</button> <button type="reset">Cancella</button>
+            </form>
         
-        <h3>Modifica</h3>
-        <form method="post" action="venditore.html">
-            <div>
-                <label for="id" id="id">Codice del prodotto</label>
-                <input type="number" name="id" id="id" />              
-                <label for="nomep" id="prname2">Nome del prodotto</label>
-                <input type="text" name="titolo" id="nomep" />
-                <label for="categoria" id="cat">Categoria</label>
-                <input type="text" id="categoria" name="categoria" />
-                <label for="prezzo" id="prezzo">Prezzo (in €)</label>
-                <input type="number" name="prezzo" id="prezzo" />
-                <label for="quantita" id="quant">Pezzi disponibili</label>
-                <input type="number" name="quantita" id="quantita" />
-            </div>
-            <br />
-            <button type="submit" name="Edit">Modifica</button> <button type="reset">Cancella</button>
-        </form>
-        
-        <h3>Cancella</h3>
-        <form method="post" action="venditore.html">
-            <div>
-                <label for="id" id="id">Codice del prodotto</label>
-                <input type="number" name="id" id="id" />
-            </div>
-            <br />
-            <button type="submit" name="Elimina">Elimina</button> <button type="reset">Cancella</button>
-        </form>
-        
+            <h3>Cancella</h3>
+            <form method="post" action="venditore.html">
+                <div>
+                    <label for="id" id="id">Codice del prodotto</label>
+                    <input type="number" name="id" id="id" />
+                </div>
+                <br />
+                <button type="submit" name="Elimina">Elimina</button> <button type="reset">Cancella</button>
+            </form>            
+        </c:otherwise>    
+        </c:choose>    
         </div>
         
         </div>

@@ -3,17 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
+
+import java.util.ArrayList;
 
 /**
  *
  * @author Francy
  */
-public class Cliente extends Utenti{
+public class Venditore extends Utenti {   
     
-    public Cliente()
-    {
+    ArrayList<Utenti> listaVenditori = new ArrayList<Utenti>();
+    
+    public Venditore(){
         super();
     }
-        
+    
 }

@@ -30,9 +30,7 @@ CREATE TABLE oggetto (
 	quantita INTEGER,
 	prezzo DOUBLE PRECISION,
 	idvenditore INTEGER,
-	idcliente INTEGER,
-        FOREIGN KEY (idvenditore) REFERENCES venditore(codice),
-        FOREIGN KEY (idcliente) REFERENCES cliente(codice)
+        FOREIGN KEY (idvenditore) REFERENCES venditore(codice)
 );
 
 CREATE TABLE acquisto (
@@ -67,11 +65,11 @@ VALUES
 
 INSERT INTO oggetto
 VALUES
-(default, 'The Imitation Game', 'Storico', 50, 20, 2, 1),
-(default, 'Frozen', 'Animazione', 50, 16, 1, 3),
-(default, 'Sherlock - le prime tre stagioni', 'Giallo', 30, 25, 3, 2),
-(default, 'Pirati dei Caraibi: La maledizione della prima luna', 'Avventura', 25, 10, 3, 3),
-(default, 'Il discorso del Re', 'Storico', 55, 14, 2, 1);
+(default, 'The Imitation Game', 'Storico', 50, 20),
+(default, 'Frozen', 'Animazione', 50, 16),
+(default, 'Sherlock - le prime tre stagioni', 'Giallo', 30, 25),
+(default, 'Pirati dei Caraibi: La maledizione della prima luna', 'Avventura', 25, 10),
+(default, 'Il discorso del Re', 'Storico', 55, 14);
 
 INSERT INTO acquisto
 VALUES

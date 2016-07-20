@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceController;
 
+import gestioneEcommerceModel.UtentiFactory;
+import gestioneEcommerceModel.Utenti;
+import gestioneEcommerceModel.Cliente;
+import gestioneEcommerceModel.OggettiFactory;
+import gestioneEcommerceModel.SaldoFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -57,6 +62,8 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession(true);
+        
+        session.setAttribute("errore", null);
                 
         if(request.getParameter("Submit") != null)
         {   
@@ -71,10 +78,12 @@ public class Login extends HttpServlet {
                 if(u instanceof Cliente) {
                     session.setAttribute("tipo", "cliente");
                     session.setAttribute("id", u.codice);
+                    session.setAttribute("errore",null);
                     request.getRequestDispatcher("cliente.html").forward(request,response);                    
                 } else {
                     session.setAttribute("tipo", "venditore");
                     session.setAttribute("id", u.codice);
+                    session.setAttribute("errore",null);
                     request.getRequestDispatcher("venditore.html").forward(request,response);
                 }
             } else {
@@ -83,12 +92,10 @@ public class Login extends HttpServlet {
             
             
             if(session.getAttribute("isLogged").equals(false)){
-                request.getRequestDispatcher("errlogin.jsp").forward(request,response);
-            }
-            
-        } else {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } 
+                session.setAttribute("errore","not_ok");
+            }            
+        }       
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

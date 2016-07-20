@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceController;
 
+import gestioneEcommerceModel.OggettiFactory;
+import gestioneEcommerceModel.Oggetto;
+import gestioneEcommerceModel.UtentiFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,21 +39,47 @@ public class Buyer extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        HttpSession session = request.getSession(false);        
+        HttpSession session = request.getSession(false);
+
+        if((request.getParameter("conferma") == null) && (request.getParameter("compra") == null)){
+            if(session.getAttribute("tipo").equals("cliente")){
+                ArrayList<Oggetto> listaOggetti = OggettiFactory.getInstance().getObjectList();
+                request.setAttribute("oggetti", listaOggetti);
+                session.setAttribute("accesso","Ok");
+            } else {
+                session.setAttribute("accesso","No");
+            }
+        }        
         
         if(request.getParameter("conferma") != null){
-                String title = request.getParameter("titolo");
+            
+                Boolean ok = false;
+            
+                String title = request.getParameter("objtitle");
                 int objprice = Integer.parseInt(request.getParameter("objprice"));
                 
+                // ID CLIENTE
+                int idcl = (Integer) session.getAttribute("id");
+                // SALDO CLIENTE
+                int saldo = UtentiFactory.getInstance().getSaldoCliente(idcl);
+                
+                // ID OGGETTO
                 int idobj = OggettiFactory.getInstance().getObjIdbyTitolo(title);
                 
-                int idcl = UtentiFactory.getInstance().getIdClbyAcquisto(idobj);
-                int idv = UtentiFactory.getInstance().getIdVbyAcquisto(idobj);
-                
-            try {
-                Boolean ok = OggettiFactory.getInstance().compraVendita(title, objprice, idcl, idv);
-            } catch (SQLException ex) {
-                Logger.getLogger(Buyer.class.getName()).log(Level.SEVERE, null, ex);
+                // ID VENDITORE
+                int idv = UtentiFactory.getInstance().getIdVbyObj(idobj);
+            
+            if(saldo > objprice){                
+                try {
+                    ok = OggettiFactory.getInstance().compraVendita(title, objprice, idcl, idv);
+                    session.setAttribute("esito","good");
+                    session.setAttribute("accesso",null);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                    session.setAttribute("esito","notgood");
+                    session.setAttribute("accesso",null);
             }
             
         } else {
@@ -68,22 +95,12 @@ public class Buyer extends HttpServlet {
                             request.setAttribute("categoria", o.categoria); 
                         }
                     }
-                    request.getRequestDispatcher("acquisto.jsp").forward(request,response);
-                } else {
-                        if(session.getAttribute("isLogged").equals(true)){
-                            if(session.getAttribute("tipo").equals("cliente")){
-                                ArrayList<Oggetto> listaOggetti = OggettiFactory.getInstance().getObjectList();
-                                request.setAttribute("oggetti", listaOggetti);
-                                request.getRequestDispatcher("cliente.jsp").forward(request, response);
-                            } else {
-                                request.getRequestDispatcher("accessonegato.jsp").forward(request, response);
-                            }
-                       } else {
-                            request.getRequestDispatcher("accessonegato.jsp").forward(request, response);
-                       }
-                }
+                    
+                    session.setAttribute("accesso","buying");
+                } 
         }
-        
+
+        request.getRequestDispatcher("cliente.jsp").forward(request,response);        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

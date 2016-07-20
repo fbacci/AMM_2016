@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$(document).ready(function ()
-{
-   $("#q").keyup(function()
-    {  
+$(document).ready(function (){
+    
+   $("#q").keyup(function(){  
         // Preleva il valore
         var q = $("#q").val();
        
@@ -31,38 +30,43 @@ function updateList(listaOggetti){
     
     if(listaOggetti.isEmpty()){
         var msg = document.createTextNode("L'oggetto non disponibile nel catalogo.");
-        $("messaggio").append(msg);
+        $("#messaggio").append(msg);
     } else {
-            $("#obj_row").empty();
+                $("#obj_row").empty();
 
-            for(var obj in listaOggetti){
-                var newtd1 = document.createElement("td");
-                var newtd2 = document.createElement("td");
-                var newtd3 = document.createElement("td");
-                var newtd4 = document.createElement("td");
-                var addcart = document.createElement("a");
+                for(var obj in listaOggetti){
+                    var newtd0 = document.createElement("td");
+                    var newtd1 = document.createElement("td");
+                    var newtd2 = document.createElement("td");
+                    var newtd3 = document.createElement("td");
+                    var newtd4 = document.createElement("td");
+                    var addcart = document.createElement("a");
+                    
+                    newtd0.setAttribute("id", obj.id);
+                    newtd1.setAttribute("titolo", obj.titolo);
+                    newtd2.setAttribute("quantita", obj.quantita);
+                    newtd3.setAttribute("prezzo", obj.prezzo);
+                    addcart.setAttribute("href","cliente.html?titolo=" + listaOggetti[obj].titolo);
+                        
+                    var id = document.createTextNode(listaOggetti[obj].id);    
+                    var title = document.createTextNode(listaOggetti[obj].titolo);
+                    var quantity = document.createTextNode(listaOggetti[obj].quantita);
+                    var price = document.createTextNode(listaOggetti[obj].prezzo);
+                    var add = document.createTextNode("Aggiungi al carrello");
 
-                newtd1.setAttribute("titolo", obj.titolo);
-                newtd2.setAttribute("quantita", obj.quantita);
-                newtd3.setAttribute("prezzo", obj.prezzo);
-                addcart.setAttribute("href","cliente.html?titolo=" + listaOggetti[obj].titolo);
-
-                var title = document.createTextNode(listaOggetti[obj].titolo);
-                var quantity = document.createTextNode(listaOggetti[obj].quantita);
-                var price = document.createTextNode(listaOggetti[obj].prezzo);
-                var add = document.createTextNode("Aggiungi al carrello");
-
-                addcart.appendChild(add);
-
-                newtd1.appendChild(title);
-                newtd2.appendChild(quantity);
-                newtd3.appendChild(price);
-                newtd4.appendChild(addcart);
-
-                $("#obj_row").append(newtd1);
-                $("#obj_row").append(newtd2);
-                $("#obj_row").append(newtd3);
-                $("#obj_row").append(newtd4);
-            }
+                    addcart.appendChild(add);
+                    
+                    newtd0.appendChild(id);
+                    newtd1.appendChild(title);
+                    newtd2.appendChild(quantity);
+                    newtd3.appendChild(price);
+                    newtd4.appendChild(addcart);
+                    
+                    $("#obj_row").append(newtd0);
+                    $("#obj_row").append(newtd1);
+                    $("#obj_row").append(newtd2);
+                    $("#obj_row").append(newtd3);
+                    $("#obj_row").append(newtd4);
+                }
             }
 }

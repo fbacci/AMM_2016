@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceController;
 
+import gestioneEcommerceModel.OggettiFactory;
+import gestioneEcommerceModel.Oggetto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -39,11 +41,8 @@ public class Filter extends HttpServlet {
         String cmd = request.getParameter("cmd");
         
         if(session.getAttribute("isLogged").equals(true)){
-            
             if (cmd != null){
-
-                if (cmd.equals("cerca")) 
-                {
+                if (cmd.equals("cerca")){
                     ArrayList<Oggetto> listaOggetti = OggettiFactory.getInstance().getObjectListbyTitle(request.getParameter("text"));
 
                     request.setAttribute("listaOggetti", listaOggetti);

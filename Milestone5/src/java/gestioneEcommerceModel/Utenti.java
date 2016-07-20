@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
 
 /**
  *
@@ -11,12 +11,12 @@ package gestioneEcommerce;
  */
 public class Utenti {
     
-protected int codice;
-protected String nome;
-protected String cognome;
-protected String username;
-protected String password;
-protected int saldo;
+public int codice;
+public String nome;
+public String cognome;
+public String username;
+public String password;
+public int saldo;
     
     public Utenti(){
         codice = 0;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,9 +46,11 @@ public class OggettiFactory {
             
             PreparedStatement stmt = null;
             
-            String query = "INSERT INTO oggetto " + "VALUES (default,?,?,?,?)";            
+            String query = "INSERT INTO oggetto (id, titolo, categoria, quantita, prezzo) " + "VALUES (default,?,?,?,?)";            
                   
             stmt = conn.prepareStatement(query);
+            
+            conn.commit();
             
             stmt.setString(1, titolo);
             stmt.setString(2, categoria);
@@ -67,8 +69,9 @@ public class OggettiFactory {
             
             stmt.close();
             conn.close();
-        } catch(SQLException e){
             
+        } catch(SQLException e){
+            e.printStackTrace();
         }
         
         return o;
@@ -78,23 +81,34 @@ public class OggettiFactory {
     public void cancellaOggetto(int id){
         
         try{
-            
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
             
-            String query = "DELETE FROM oggetto" + "WHERE id = ?";
+            String query = "DELETE FROM oggetto " + "WHERE id = ?";
+            String q2 = "DELETE FROM acquisto " + "WHERE idoggetto = ?";
             
             PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt2 = conn.prepareStatement(q2);
             
             stmt.setInt(1,id);
-           
+            stmt2.setInt(1,id);
+            
             int r = stmt.executeUpdate();
+            int r2 = stmt2.executeUpdate();
             
             if(r==1){
                 System.out.println("Ok!");
-            }            
+            } 
+            
+            if(r2==1){
+                System.out.println("Ok!");
+            }
+            
+            stmt.close();
+            stmt2.close();
+            conn.close();
                        
         } catch(SQLException e){
-            
+            e.printStackTrace();
         }
     }
     
@@ -107,7 +121,7 @@ public class OggettiFactory {
             
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
             
-            String query = "UPDATE oggetto SET titolo = ? categoria = ? prezzo = ? quantita = ? " + "WHERE id = ?";
+            String query = "UPDATE oggetto SET " + "titolo = ?, categoria = ?, prezzo = ?, quantita = ? " + "WHERE id = ?";
             
             PreparedStatement stmt = conn.prepareStatement(query);
             
@@ -125,10 +139,13 @@ public class OggettiFactory {
                 o.setCategoria(categoria);
                 o.setQuantita(quantita);
                 o.setPrezzo(prezzo);
-            }            
+            }       
+            
+            stmt.close();
+            conn.close();
                        
         } catch(SQLException e){
-            
+            e.printStackTrace();
         }
         
         return o;
@@ -226,7 +243,7 @@ public ArrayList<Oggetto> getObjectListbyTitle(String testo){
             }
             
         } catch(SQLException e){
-            
+            e.printStackTrace();
         }
         
         return listaObjCategoria;
@@ -254,13 +271,13 @@ public ArrayList<Oggetto> getObjectListbyTitle(String testo){
         stmt.close();
         conn.close();
     } catch(SQLException e){
-            
+          e.printStackTrace();  
     }
         
         return id;
     }
     
-    public Oggetto getOggettoId(int id){
+    public Oggetto getOggettoId(int id) throws SQLException{
         try{
             Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
             
@@ -285,76 +302,82 @@ public ArrayList<Oggetto> getObjectListbyTitle(String testo){
                 return obj;
             }
         } catch(SQLException e){
-            
+            e.printStackTrace();
         }
         
         return null;
-    }  
+    }      
     
     public boolean compraVendita (String titolo, int prezzo, int idcl, int idv) throws SQLException{
         Boolean result = false;
         
-        Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
-        
-        PreparedStatement rimuoviObj = null;
-        PreparedStatement decrementaCl = null;
-        PreparedStatement incrementaV = null;
-        
-        String cancella = "UPDATE FROM oggetto SET quantita = quantita - 1 WHERE " + "titolo = ? AND idvenditore = ?";
-        String decrementa = "UPDATE saldo SET " + "saldo = saldo - ?" + "JOIN cliente ON saldo.id = cliente.idsaldo "+ 
-                            "WHERE cliente.codice = ?";
-        String incrementa = "UPDATE saldo SET " + "saldo = saldo - ?" + "JOIN venditore ON saldo.id = venditore.idsaldo "+ 
-                            "WHERE venditore.codice = ?";
-        
         try {
-            conn.setAutoCommit(false);
+            Connection conn = DriverManager.getConnection(connectionString, "fbacci", "0000");
             
-            rimuoviObj = conn.prepareStatement(cancella);
-            decrementaCl = conn.prepareStatement(decrementa);
-            incrementaV = conn.prepareStatement(incrementa);
-            
-            rimuoviObj.setString(1,titolo);
-            rimuoviObj.setInt(2, idv);
-            
-            decrementaCl.setInt(1,prezzo);
-            decrementaCl.setInt(2,idcl);
-            
-            incrementaV.setInt(1,prezzo);
-            incrementaV.setInt(2,idv);
-            
-            int q1 = rimuoviObj.executeUpdate();
-            int q2 = decrementaCl.executeUpdate();
-            int q3 = incrementaV.executeUpdate();
-            
-            if( q1 != 1 || q2 != 1 || q3 != 1){
-                conn.rollback();
-            } else {result = true;}
-            
-            conn.commit();
-            
-        } catch(SQLException e){
-            try{
-                conn.rollback();
-            }catch(SQLException e2){
-                
-            }            
-        } finally {
-            if(rimuoviObj != null){
-                rimuoviObj.close();
+            // ID SALDO CLIENTE E VENDITORE
+            int id_sc = UtentiFactory.getInstance().getIdSaldoCl(idcl);
+            int id_sv = UtentiFactory.getInstance().getIdSaldoV(idv);
+
+            PreparedStatement rimuoviObj = null;
+            PreparedStatement decrementaCl = null;
+            PreparedStatement incrementaV = null;
+
+            String cancella = "UPDATE oggetto SET quantita = quantita - 1 WHERE " + "titolo = ?";
+            String decrementa = "UPDATE saldo SET " + "saldo = saldo - ? " + "WHERE id = ?";
+            String incrementa = "UPDATE saldo SET " + "saldo = saldo + ? " + "WHERE id = ?";
+
+            try {
+                conn.setAutoCommit(false);
+
+                rimuoviObj = conn.prepareStatement(cancella);
+                decrementaCl = conn.prepareStatement(decrementa);
+                incrementaV = conn.prepareStatement(incrementa);
+
+                rimuoviObj.setString(1,titolo);
+
+                decrementaCl.setInt(1,prezzo);
+                decrementaCl.setInt(2,id_sc);
+
+                incrementaV.setInt(1,prezzo);
+                incrementaV.setInt(2,id_sv);
+
+                int q1 = rimuoviObj.executeUpdate();
+                int q2 = decrementaCl.executeUpdate();
+                int q3 = incrementaV.executeUpdate();
+
+                if( q1 != 1 || q2 != 1 || q3 != 1){
+                    conn.rollback();
+                } else {
+                    result = true;
+                }
+
+                conn.commit();
+
+            } catch(SQLException e){
+                try{
+                    conn.rollback();
+                }catch(SQLException e2){
+                    e2.printStackTrace();
+                }            
+            } finally {
+                if(rimuoviObj != null){
+                    rimuoviObj.close();
+                }
+
+                if(decrementaCl != null){
+                    decrementaCl.close();
+                }
+
+                if(incrementaV != null){
+                    incrementaV.close();
+                }
+
+                conn.setAutoCommit(true);
+                conn.close();     
             }
-            
-            if(decrementaCl != null){
-                decrementaCl.close();
-            }
-            
-            if(incrementaV != null){
-                incrementaV.close();
-            }
-            
-            conn.setAutoCommit(true);
-            conn.close();     
+        } catch (SQLException e){
+            e.printStackTrace();
         }
-        
         return result;
     }      
     

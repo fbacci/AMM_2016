@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gestioneEcommerce;
+package gestioneEcommerceModel;
 
 /**
  *
@@ -11,11 +11,11 @@ package gestioneEcommerce;
  */
 public class Oggetto {
     
-    protected int id;
-    protected String titolo;
-    protected String categoria;
-    protected int quantita;
-    protected int prezzo;
+    public int id;
+    public String titolo;
+    public String categoria;
+    public int quantita;
+    public int prezzo;
         
     public Oggetto()
     {
